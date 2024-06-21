@@ -1,6 +1,26 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@layer base {
+    ::-webkit-scrollbar {
+        @apply w-1;
+    }
+    ::-webkit-scrollbar {
+        @apply h-1;
+    }
+
+    ::-webkit-scrollbar-track {
+        @apply bg-inherit;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        @apply bg-sky-400 dark:bg-violet-600 rounded-xl;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        @apply bg-sky-800;
+    }
+}
 :root {
     font-family: Microsoft YaHei, sans-serif;
     line-height: 1.5;

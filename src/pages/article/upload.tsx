@@ -1,7 +1,8 @@
-import { Component } from "react";
 import { CategoryDTO } from "../../request/types/response/categories.ts";
 import { Loading } from "../../component/Loading/Loading.tsx";
 import FloatingLabelInput from "../../component/Input/FloatingLabelInput.tsx";
+import Select from "../../component/Select/Select.tsx";
+import React from "react";
 
 interface State {
 	title: string;
@@ -12,7 +13,7 @@ interface State {
 	uploading: boolean;
 }
 
-export default class Upload extends Component<State> {
+class Upload extends React.Component<NonNullable<unknown>, State> {
 	state: State = {
 		title: "",
 		content: "",
@@ -26,10 +27,10 @@ export default class Upload extends Component<State> {
 		return (
 			<div
 				className={
-					"h-full w-full flex flex-row divide-x divide-cyan-400"
+					"h-full w-full flex flex-row divide-x divide-gray-300"
 				}
 			>
-				<div className={"grow px-4 flex h-full flex-col"}>
+				<div className={"grow px-4 flex h-full flex-col overflow-auto"}>
 					<div className={"flex flex-row w-full my-4"}>
 						<FloatingLabelInput
 							placeholder="请输入标题"
@@ -44,56 +45,43 @@ export default class Upload extends Component<State> {
 					</div>
 					<div className={"flex flex-row w-full mb-4"}>
 						<FloatingLabelInput
-							aria-label={"新增类型"}
-							placeholder="新增类型"
-							label={"新增类型"}
-							maxLength={20}
+							aria-label={"简介"}
+							placeholder="简介"
+							label={"简介"}
+							maxLength={200}
 							onKeyDown={this.tryAddNew.bind(this)}
+							rows={5}
+							textArea
 						/>
 					</div>
 					<div className={"flex flex-row w-full mb-4"}>
-						<div
-							className={"w-16 shrink-0"}
-							style={{ lineHeight: "40px" }}
-						>
-							类型
-						</div>
-						<div className="flex-wrap">
-							{this.state.categoryChunk.map((it) => (
-								<>
-									<input
-										type={"checkbox"}
-										value={it.id.toString()}
-										key={it.id}
-										className={"my-2"}
-									/>
-									<span className={"whitespace-nowrap"}>
-										{it.category}
-									</span>
-								</>
-							))}
-						</div>
+						<Select
+							value={this.state.categories}
+							onChange={(value) => {
+								this.setState({
+									categories: value as number[],
+								});
+							}}
+							options={[
+								{ id: 1, name: "123", text: "123" },
+								{ id: 2, name: "1243", text: "1234" },
+							]}
+							multiple={true}
+							addNew={this.addNewCategory.bind(this)}
+						></Select>
 					</div>
-					<div
-						className={
-							"flex flex-row w-full mb-4 grow-1 overflow-auto"
-						}
-						style={{ colorScheme: "dark" }}
-					>
-						<div
-							className={"w-16 shrink-0"}
-							style={{ lineHeight: "40px" }}
-						>
-							正文
-						</div>
-						<div className={"h-full w-full overflow-auto"}>
-							<textarea
-								value={this.state.content}
-								onChange={(e) =>
-									this.setState({ content: e.target.value })
-								}
-							></textarea>
-						</div>
+					<div className={"flex flex-row w-full mb-4"}>
+						<FloatingLabelInput
+							aria-label={"正文"}
+							placeholder="正文"
+							label={"正文"}
+							rows={20}
+							textArea
+							value={this.state.content}
+							onChange={(e) =>
+								this.setState({ content: e.target.value })
+							}
+						/>
 					</div>
 					<div className={"flex w-full mb-4 flex-row-reverse"}>
 						<button
@@ -118,5 +106,13 @@ export default class Upload extends Component<State> {
 
 	uploadArticle() {}
 
-	uploadFile() {}
+	uploadFile(e: React.DragEvent<HTMLDivElement>) {
+		e.preventDefault();
+		e.stopPropagation();
+		const file = e.dataTransfer?.files;
+		if (!file || file.length === 0) return;
+	}
+	addNewCategory() {}
 }
+
+export const Component = Upload;

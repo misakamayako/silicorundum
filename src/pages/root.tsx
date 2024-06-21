@@ -11,7 +11,7 @@ interface Menu {
 	children: SubMenu[];
 }
 
-export default class Root extends Component<void> {
+export default class Root extends Component {
 	menu: Menu[] = [
 		{
 			title: "文章",
@@ -31,7 +31,7 @@ export default class Root extends Component<void> {
 					" ",
 				)}
 			>
-				<div className="flex h-screen flex-col justify-between border-e bg-white">
+				<div className="flex h-screen flex-col justify-between border-e bg-white select-none">
 					<div className="px-4 py-6">
 						<span className="grid h-10 w-32 place-content-center rounded-lg bg-gray-100 text-xs text-gray-600">
 							Logo
@@ -80,7 +80,16 @@ export default class Root extends Component<void> {
 						))}
 					</div>
 				</div>
-				<Outlet />
+				<div
+					className={[
+						"w-full",
+						"h-full",
+						"overflow-y-auto",
+						"overflow-x-hidden",
+					].join(" ")}
+				>
+					<Outlet />
+				</div>
 			</div>
 		);
 	}
