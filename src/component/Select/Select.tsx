@@ -28,6 +28,7 @@ interface SelectProps<T extends BaseSelection> {
 	onChange: (value: number | number[]) => void;
 	multiple?: boolean;
 	addNew?: () => void;
+	placeholder?: string;
 }
 
 export default function Select<T extends BaseSelection>({
@@ -35,6 +36,7 @@ export default function Select<T extends BaseSelection>({
 	options,
 	onChange,
 	addNew,
+	placeholder,
 	multiple = false,
 }: SelectProps<T>) {
 	const translator = useMemo(() => {
@@ -53,7 +55,7 @@ export default function Select<T extends BaseSelection>({
 				});
 				return result.join();
 			} else {
-				return "请选择";
+				return "";
 			}
 		} else {
 			return options.find((it) => it.id === value)?.text ?? "请选择";
@@ -77,11 +79,31 @@ export default function Select<T extends BaseSelection>({
 				<>
 					<div className="relative mt-2 w-full">
 						<ListboxButton className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm sm:leading-6">
-							<span className="flex items-center">
-								<span className="ml-3 block truncate">
+							<div className="flex items-center h-6">
+								<span className="ml-3 block truncate peer">
 									{text}
 								</span>
-							</span>
+								<span
+									className={[
+										"pointer-events-none",
+										"absolute",
+										"start-2.5",
+										"top-0",
+										"-translate-y-1/2",
+										"bg-white",
+										"p-0.5",
+										"text-xs",
+										"text-gray-700",
+										"transition-all",
+										"peer-empty:top-4",
+										"peer-empty:text-sm",
+										"peer-focus:top-0",
+										"peer-focus:text-xs",
+									].join(" ")}
+								>
+									{placeholder ?? "请选择："}
+								</span>
+							</div>
 							<span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
 								<ChevronUpDownIcon
 									className="h-5 w-5 text-gray-400"

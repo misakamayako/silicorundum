@@ -1,6 +1,7 @@
 import tag from "./tag.svg";
 import generateRandomId from "../../utils/generateRandomId";
 import TextArea from "../TextArea/TextArea.tsx";
+import React, { useRef } from "react";
 
 interface ArticleEditorProps {
 	// 基础属性
@@ -27,16 +28,16 @@ interface ArticleEditorProps {
 }
 
 export default function ArticleEditor(props: ArticleEditorProps) {
-	const id = "label_" + generateRandomId(6);
+	const id = useRef("label_" + generateRandomId());
 	return (
 		<div>
 			<div className="border-b border-b-gray-200 focus-within:border-b-indigo-600 max-h-48 overflow-auto">
-				<label htmlFor={id} className="t">
+				<label htmlFor={id.current} className="t">
 					{props.placeholder}
 				</label>
 				<TextArea
 					rows={150}
-					id={id}
+					id={id.current}
 					placeholder={props.placeholder}
 					value={props.value}
 					onChange={props.onChange}
@@ -58,14 +59,6 @@ export default function ArticleEditor(props: ArticleEditorProps) {
 						</button>
 					</div>
 				</div>
-				{/*<div className="shrink-0">*/}
-				{/*	<button*/}
-				{/*		type="button"*/}
-				{/*		className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-4 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 bow bpd"*/}
-				{/*	>*/}
-				{/*		提交*/}
-				{/*	</button>*/}
-				{/*</div>*/}
 			</div>
 		</div>
 	);

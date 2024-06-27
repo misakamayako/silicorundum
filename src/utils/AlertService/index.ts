@@ -1,2 +1,2 @@
 import AlertService from "./AlertService";
-export default AlertService
+export default AlertService;
