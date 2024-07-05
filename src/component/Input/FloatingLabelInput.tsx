@@ -40,28 +40,29 @@ export default function FloatingLabelInput(props: Props) {
 						"w-full",
 						"resize-none",
 					].join(" ")}
+					maxLength={props.maxLength}
 					placeholder={props.placeholder}
+					rows={props.rows}
 					value={props.value}
 					onChange={props.onChange}
-					maxLength={props.maxLength}
-					rows={props.rows}
 				/>
 			) : (
 				<input
-					type="text"
 					className={[
 						"peer",
 						"border-none",
 						"bg-transparent",
+						"w-full",
 						"placeholder-transparent",
 						"focus:border-transparent",
 						"focus:outline-none",
 						"focus:ring-0",
 					].join(" ")}
+					maxLength={props.maxLength}
 					placeholder={props.placeholder}
+					type="text"
 					value={props.value}
 					onChange={props.onChange}
-					maxLength={props.maxLength}
 				/>
 			)}
 			{props.label ? (

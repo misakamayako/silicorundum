@@ -1,0 +1,14 @@
+.SilicorundumButton {
+    @apply inline-flex items-center gap-2 rounded-md bg-gray-700;
+    @apply py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner;
+    @apply shadow-white/10 focus:outline-none hover:bg-gray-600 active:bg-gray-700;
+    @apply active:outline-1 active:outline-white;
+}
+
+.SilicorundumButton &[disabled] {
+    @apply opacity-50 cursor-not-allowed;
+}
+
+.SilicorundumButton ~ .SilicorundumButton {
+    @apply ml-4;
+}

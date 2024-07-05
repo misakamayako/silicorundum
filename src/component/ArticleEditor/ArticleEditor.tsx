@@ -32,13 +32,13 @@ export default function ArticleEditor(props: ArticleEditorProps) {
 	return (
 		<div>
 			<div className="border-b border-b-gray-200 focus-within:border-b-indigo-600 max-h-48 overflow-auto">
-				<label htmlFor={id.current} className="t">
+				<label className="t" htmlFor={id.current}>
 					{props.placeholder}
 				</label>
 				<TextArea
-					rows={150}
 					id={id.current}
 					placeholder={props.placeholder}
+					rows={150}
 					value={props.value}
 					onChange={props.onChange}
 				></TextArea>
@@ -47,13 +47,13 @@ export default function ArticleEditor(props: ArticleEditorProps) {
 				<div className="flex items-center space-x-6 ">
 					<div className="flow-root">
 						<button
-							type="button"
 							className="ml-2 inline-flex h-6 w-6 items-center justify-center rounded-full text-gray-400 hover:text-gray-500"
+							type="button"
 						>
 							<img
-								src={tag}
 								alt="tag"
 								className="text-gray-300 h-5 w-5 shrink-0 -m-1"
+								src={tag}
 							/>
 							<span className="sr-only">选择标签</span>
 						</button>

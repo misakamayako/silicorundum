@@ -21,7 +21,7 @@ enum UploadStatus {
 
 async function uploadFile(file: File): Promise<string> {
 	// eslint-disable-next-line react-hooks/rules-of-hooks
-	OSSService.useBucket("misaka-temp-bucket");
+	OSSService.useBucket("misaka-networks-temp");
 	return (
 		await OSSService.put(
 			generateRandomId() +
@@ -59,9 +59,9 @@ export default function ImageResource({ file, onRemove }: ImageResourceProps) {
 	return (
 		<div className={["relative", "mb-2"].join(" ")}>
 			<img
-				src={localImgURL}
 				alt=""
 				className={"peer"}
+				src={localImgURL}
 				onLoad={handleFile}
 			/>
 			{uploadingStatus !== UploadStatus.init ? (

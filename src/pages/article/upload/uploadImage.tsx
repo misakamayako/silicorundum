@@ -6,16 +6,16 @@ export default function UploadImageList() {
 	return (
 		<div
 			className={["h-full", "overflow-y-auto"].join(" ")}
+			onDragOver={(e) => e.preventDefault()}
 			onDrop={(e) => {
 				e.preventDefault();
 				setFileList(fileList.concat(Array.from(e.dataTransfer.files)));
 			}}
-			onDragOver={(e) => e.preventDefault()}
 		>
 			{fileList.map((it, index) => (
 				<ImageResource
-					key={it.size}
 					file={it}
+					key={it.size}
 					onRemove={() => {
 						fileList.splice(index, 1);
 						setFileList([...fileList]);

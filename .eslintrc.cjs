@@ -16,6 +16,10 @@ module.exports = {
 			{ allowConstantExport: true },
 		],
 		"no-mixed-spaces-and-tabs": "off",
-		"react/jsx-sort-props": 1,
+		"react/jsx-sort-props": [1,{
+			callbacksLast:true,
+			shorthandFirst:true
+		}],
+		"react/react-in-jsx-scope":"off"
 	},
 };
