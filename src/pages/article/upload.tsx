@@ -5,7 +5,11 @@ import UploadImageList from "./upload/uploadImage.tsx";
 import { addNewCategory, getCategories } from "../../api/category.ts";
 import AlertService from "../../utils/AlertService";
 import Button from "../../component/Button/Button.tsx";
-import { createArticle, previewMD } from "../../api/aritcle.ts";
+import { createArticle, getArticle, previewMD } from "../../api/aritcle.ts";
+import ModalService from "../../utils/ModalService/ModalService.tsx";
+import withRouter, {
+	RouterInfo,
+} from "../../component/withRouter/withRouter.tsx";
 
 interface State {
 	title: string;
@@ -19,7 +23,7 @@ interface State {
 	previewContent: string;
 }
 
-class Upload extends React.Component<NonNullable<unknown>, State> {
+class Upload extends React.Component<{ router: RouterInfo }, State> {
 	state: State = {
 		title: "",
 		content: "",
@@ -148,8 +152,8 @@ class Upload extends React.Component<NonNullable<unknown>, State> {
 			});
 	}
 
-	addNewCategory() {
-		const newType = prompt("请输入类型名称");
+	async addNewCategory() {
+		const newType = await ModalService.prompt("输入类型名称");
 		if (newType && newType.trim().length > 0) {
 			addNewCategory(1, newType).then(({ data }) => {
 				const array = this.state.categoryChunk;
@@ -197,7 +201,11 @@ class Upload extends React.Component<NonNullable<unknown>, State> {
 				})),
 			});
 		});
+		const id = this.props.router.params.id;
+		if (id) {
+			getArticle(parseInt(id));
+		}
 	}
 }
 
-export const Component = Upload;
+export const Component = withRouter(Upload);

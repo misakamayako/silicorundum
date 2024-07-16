@@ -10,7 +10,15 @@ const router = createBrowserRouter([
 				path: "article",
 				children: [
 					{
+						path: "index",
+						lazy: () => import("../pages/article/index.tsx"),
+					},
+					{
 						path: "upload",
+						lazy: () => import("../pages/article/upload.tsx"),
+					},
+					{
+						path: ":id/edit",
 						lazy: () => import("../pages/article/upload.tsx"),
 					},
 				],

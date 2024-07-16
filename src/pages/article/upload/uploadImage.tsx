@@ -5,7 +5,11 @@ export default function UploadImageList() {
 	const [fileList, setFileList] = useState<File[]>([]);
 	return (
 		<div
-			className={["h-full", "overflow-y-auto"].join(" ")}
+			className={[
+				"h-full",
+				"overflow-y-auto",
+				"empty:after:content-['将图片拖动到这里上传']",
+			].join(" ")}
 			onDragOver={(e) => e.preventDefault()}
 			onDrop={(e) => {
 				e.preventDefault();

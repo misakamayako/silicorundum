@@ -74,7 +74,7 @@ export default function Select<T extends BaseSelection>({
 		}
 	};
 	return (
-		<Listbox value={value} onChange={filterNotNull} multiple={multiple}>
+		<Listbox multiple={multiple} value={value} onChange={filterNotNull}>
 			{({ open }) => (
 				<>
 					<div className="relative mt-2 w-full">
@@ -106,22 +106,21 @@ export default function Select<T extends BaseSelection>({
 							</div>
 							<span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
 								<ChevronUpDownIcon
-									className="h-5 w-5 text-gray-400"
 									aria-hidden="true"
+									className="h-5 w-5 text-gray-400"
 								/>
 							</span>
 						</ListboxButton>
 
 						<Transition
-							show={open}
 							leave="transition ease-in duration-100"
 							leaveFrom="opacity-100"
 							leaveTo="opacity-0"
+							show={open}
 						>
 							<ListboxOptions className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
 								{options.map((selection) => (
 									<ListboxOption
-										key={selection.id}
 										className={({ focus }) =>
 											classNames(
 												focus
@@ -131,6 +130,7 @@ export default function Select<T extends BaseSelection>({
 												"relative cursor-default select-none py-2 pl-3 pr-9",
 											)
 										}
+										key={selection.id}
 										value={selection.id}
 									>
 										{({ selected, focus }) => (
@@ -158,8 +158,8 @@ export default function Select<T extends BaseSelection>({
 														)}
 													>
 														<CheckIcon
-															className="h-5 w-5"
 															aria-hidden="true"
+															className="h-5 w-5"
 														/>
 													</span>
 												) : null}
@@ -203,8 +203,8 @@ export default function Select<T extends BaseSelection>({
 													)}
 												>
 													<PlusIcon
-														className="h-5 w-5"
 														aria-hidden="true"
+														className="h-5 w-5"
 													/>
 												</span>
 											</>
