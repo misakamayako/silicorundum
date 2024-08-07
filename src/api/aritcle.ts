@@ -34,7 +34,7 @@ export function queryArticle(page: number, pageSize: number) {
 }
 
 export function getArticle(id: number) {
-	return requestServer.get<ResponseDTO<ArticleDetailDTO>>(
+	return requestServer.get<ResponseDTO<QueryResultArticleDTO>>(
 		`/${resource}/${id}`,
 	);
 }

@@ -1,6 +1,6 @@
 import { createRoot, Root } from "react-dom/client";
 import { Modal, ModalProps } from "../../component/Modal/Modal.tsx";
-import { forwardRef, ReactNode, useState } from "react";
+import { ReactNode, useState } from "react";
 import FloatingLabelInput from "../../component/Input/FloatingLabelInput.tsx";
 import { ModalAction } from "../../types/enums.ts";
 
@@ -99,17 +99,16 @@ export default new ModalService();
 interface ModalInputInterface {
 	setValue(value: string): void;
 }
-const PrivateInput = forwardRef(function ModalInput(
-	props: ModalInputInterface,
-) {
+const PrivateInput = (props: ModalInputInterface) => {
 	const [value, setValue] = useState("");
+
 	return (
 		<FloatingLabelInput
 			value={value}
 			onChange={(e) => {
 				setValue(e.target.value);
-				props.setValue(value);
+				props.setValue(e.target.value); // 这里应传入新的 value 而不是旧的
 			}}
-		></FloatingLabelInput>
+		/>
 	);
-});
+};

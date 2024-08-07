@@ -10,6 +10,8 @@ import ModalService from "../../utils/ModalService/ModalService.tsx";
 import withRouter, {
 	RouterInfo,
 } from "../../component/withRouter/withRouter.tsx";
+import OSSService from "../../utils/OSSService/OSSService.ts";
+import { OSSBucket } from "../../types/enums.ts";
 
 interface State {
 	title: string;
@@ -139,7 +141,7 @@ class Upload extends React.Component<{ router: RouterInfo }, State> {
 		createArticle({
 			title: this.state.title,
 			brief: this.state.brief,
-			categories: this.state.categories,
+			category: this.state.categories,
 			content: this.state.content,
 		})
 			.then(() => {
@@ -203,7 +205,18 @@ class Upload extends React.Component<{ router: RouterInfo }, State> {
 		});
 		const id = this.props.router.params.id;
 		if (id) {
-			getArticle(parseInt(id));
+			getArticle(parseInt(id)).then(async ({ data }) => {
+				if (data.data.markdownUrl) {
+					OSSService.useBucket(OSSBucket.Article);
+					const response = await OSSService.get(
+						data.data.markdownUrl,
+					);
+					const td = new TextDecoder();
+					this.setState({
+						content: td.decode(response.content),
+					});
+				}
+			});
 		}
 	}
 }

@@ -18,7 +18,7 @@ type PreviewResult = string;
 interface ArticleUploadDTO {
 	title: string;
 	brief: string;
-	categories: number[];
+	category: number[];
 	content: string;
 }
 interface PageResultDTO<T> {

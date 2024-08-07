@@ -3,3 +3,7 @@ export enum ModalAction {
 	cancel,
 	close,
 }
+export enum OSSBucket {
+	Article = "misaka-networks-article",
+	Temp = "misaka-networks-temp",
+}
