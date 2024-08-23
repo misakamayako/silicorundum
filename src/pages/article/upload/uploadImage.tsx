@@ -1,8 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ImageResource from "../../../component/Uploader/ImageUploader.tsx";
 
-export default function UploadImageList() {
-	const [fileList, setFileList] = useState<File[]>([]);
+interface Props {
+	imgList: string[];
+}
+
+export default function UploadImageList(props: Props) {
+	const [fileList, setFileList] = useState<Array<File | string>>([]);
+	useEffect(() => {
+		setFileList([
+			...fileList.filter((it) => typeof it !== "string"),
+			...props.imgList,
+		]);
+	}, [props]);
 	return (
 		<div
 			className={[
@@ -19,7 +29,7 @@ export default function UploadImageList() {
 			{fileList.map((it, index) => (
 				<ImageResource
 					file={it}
-					key={it.size}
+					key={typeof it === "string" ? it : it.size}
 					onRemove={() => {
 						fileList.splice(index, 1);
 						setFileList([...fileList]);

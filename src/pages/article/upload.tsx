@@ -5,7 +5,13 @@ import UploadImageList from "./upload/uploadImage.tsx";
 import { addNewCategory, getCategories } from "../../api/category.ts";
 import AlertService from "../../utils/AlertService";
 import Button from "../../component/Button/Button.tsx";
-import { createArticle, getArticle, previewMD } from "../../api/aritcle.ts";
+import {
+	createArticle,
+	getArticle,
+	getImagesOfArticle,
+	previewMD,
+	updateArticle,
+} from "../../api/aritcle.ts";
 import ModalService from "../../utils/ModalService/ModalService.tsx";
 import withRouter, {
 	RouterInfo,
@@ -123,35 +129,44 @@ class Upload extends React.Component<{ router: RouterInfo }, State> {
 							loading={this.state.uploading}
 							onClick={this.uploadArticle.bind(this)}
 						>
-							上传
+							{this.props.router.params.id ? "更新" : "上传"}
 						</Button>
 					</div>
 				</div>
 				<div className={"w-72 px-4 shrink-0"}>
-					<UploadImageList />
+					<UploadImageList imgList={this.state.imageList} />
 				</div>
 			</div>
 		);
 	}
 
-	uploadArticle() {
+	async uploadArticle() {
 		if (!this.state.title) return AlertService.error("请输入标题");
 		if (!this.state.content) return AlertService.error("请输入内容");
 		this.setState({ uploading: !this.state.uploading });
-		createArticle({
-			title: this.state.title,
-			brief: this.state.brief,
-			category: this.state.categories,
-			content: this.state.content,
-		})
-			.then(() => {
-				AlertService.info("上传成功");
-			})
-			.finally(() => {
-				this.setState({
-					uploading: false,
+		try {
+			if (this.props.router.params.id) {
+				await updateArticle(parseInt(this.props.router.params.id), {
+					id: parseInt(this.props.router.params.id),
+					title: this.state.title,
+					brief: this.state.brief,
+					category: this.state.categories,
+					content: this.state.content,
 				});
+			} else {
+				await createArticle({
+					title: this.state.title,
+					brief: this.state.brief,
+					category: this.state.categories,
+					content: this.state.content,
+				});
+			}
+			AlertService.info("上传成功");
+		} finally {
+			this.setState({
+				uploading: false,
 			});
+		}
 	}
 
 	async addNewCategory() {
@@ -165,11 +180,13 @@ class Upload extends React.Component<{ router: RouterInfo }, State> {
 				});
 				this.setState({
 					categoryChunk: structuredClone(array),
+					categories: [...this.state.categories, data.data.id],
 				});
 				AlertService.info("添加成功");
 			});
 		}
 	}
+
 	preview() {
 		if (this.state.showPreview) {
 			this.setState({
@@ -203,19 +220,49 @@ class Upload extends React.Component<{ router: RouterInfo }, State> {
 				})),
 			});
 		});
-		const id = this.props.router.params.id;
+		const id = this.props.router.params.id as ID;
 		if (id) {
-			getArticle(parseInt(id)).then(async ({ data }) => {
-				if (data.data.markdownUrl) {
+			getArticle(id).then(async ({ data }) => {
+				const dto = data.data;
+				if (dto.markdownUrl) {
 					OSSService.useBucket(OSSBucket.Article);
 					const response = await OSSService.get(
-						data.data.markdownUrl,
+						dto.markdownUrl + ".gz",
 					);
-					const td = new TextDecoder();
+					const readableStream = new ReadableStream({
+						start(controller) {
+							controller.enqueue(
+								new Uint8Array(response.content),
+							);
+							controller.close();
+						},
+					});
+					const decompressionStream = new DecompressionStream("gzip");
+					const decompressStream =
+						readableStream.pipeThrough(decompressionStream);
+					const td = new TextDecoderStream();
+					const decodedStream = decompressStream.pipeThrough(td);
+					const reader = decodedStream.getReader();
+					let done: boolean;
+					let value: string | undefined;
+					let result = "";
+					while ((({ done, value } = await reader.read()), !done)) {
+						result += value;
+					}
 					this.setState({
-						content: td.decode(response.content),
+						content: result,
 					});
 				}
+				this.setState({
+					title: dto.title,
+					brief: dto.brief ?? "",
+					categories: dto.category.map((it) => it.id),
+				});
+			});
+			getImagesOfArticle(id).then(({ data }) => {
+				this.setState({
+					imageList: data.data,
+				});
 			});
 		}
 	}

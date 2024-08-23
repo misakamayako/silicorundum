@@ -8,7 +8,7 @@ import copyToClipboard from "../../utils/writeClipboard.ts";
 import TrashIcon from "@heroicons/react/20/solid/TrashIcon";
 
 type ImageResourceProps = {
-	readonly file: File;
+	readonly file: File | string;
 	onRemove: () => void;
 };
 
@@ -35,14 +35,30 @@ export default function ImageResource({ file, onRemove }: ImageResourceProps) {
 	const [uploadingStatus, setUploadingStatus] = useState(UploadStatus.init);
 	const [localImgURL, setLocalImgURL] = useState<string>("");
 	const finalURL = useRef<string>("");
+	const fileName = useRef("");
 	useEffect(() => {
-		setLocalImgURL(URL.createObjectURL(file));
-		return () => {
-			localImgURL && URL.revokeObjectURL(localImgURL);
-		};
+		if (typeof file === "string") {
+			// eslint-disable-next-line react-hooks/rules-of-hooks
+			OSSService.useBucket("misaka-networks-article");
+			setLocalImgURL(
+				OSSService.signatureUrl(
+					file.substring(file.indexOf("/", file.indexOf("//") + 2)),
+				),
+			);
+			finalURL.current = file;
+			fileName.current = file.substring(file.lastIndexOf("/"));
+			setUploadingStatus(UploadStatus.done);
+		} else {
+			setLocalImgURL(URL.createObjectURL(file));
+			fileName.current = file.name;
+			return () => {
+				localImgURL && URL.revokeObjectURL(localImgURL);
+			};
+		}
 	}, []);
 
 	function handleFile() {
+		if (typeof file === "string") return;
 		if (uploadingStatus === UploadStatus.done) return;
 		setUploadingStatus(UploadStatus.uploading);
 		uploadFile(file)
@@ -102,7 +118,7 @@ export default function ImageResource({ file, onRemove }: ImageResourceProps) {
 								className={["cursor-pointer", "w-8"].join(" ")}
 								onClick={() =>
 									copyToClipboard(
-										`![${file.name}](${finalURL.current})`,
+										`![${fileName.current}](${finalURL.current})`,
 									)
 								}
 							/>

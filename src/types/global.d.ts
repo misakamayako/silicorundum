@@ -16,6 +16,7 @@ interface CategoryDTO {
 }
 type PreviewResult = string;
 interface ArticleUploadDTO {
+	id?: number;
 	title: string;
 	brief: string;
 	category: number[];
@@ -54,3 +55,4 @@ interface ArticleDetailDTO {
 	categories: number[];
 	imgList: string[];
 }
+type ID = number | `${number}`;

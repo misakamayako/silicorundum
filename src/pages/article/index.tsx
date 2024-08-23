@@ -29,6 +29,10 @@ class ArticleIndex extends React.Component<NonNullable<unknown>, State> {
 			props: "createdAt",
 		},
 		{
+			title: "最后更新时间",
+			props: "updatedAt",
+		},
+		{
 			title: "操作",
 			width: "240px",
 			renderCell: (data) => {

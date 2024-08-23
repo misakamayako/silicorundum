@@ -16,6 +16,12 @@ export function createArticle(articleUploadDTO: ArticleUploadDTO) {
 		articleUploadDTO,
 	);
 }
+export function updateArticle(id: number, articleUploadDTO: ArticleUploadDTO) {
+	return requestServer.put<ResponseDTO<void>>(
+		`/${resource}/${id}`,
+		articleUploadDTO,
+	);
+}
 
 export function deleteArticle(id: number) {
 	return requestServer.delete<ResponseDTO<void>>(`/${resource}/${id}`);
@@ -33,8 +39,13 @@ export function queryArticle(page: number, pageSize: number) {
 	);
 }
 
-export function getArticle(id: number) {
+export function getArticle(id: ID) {
 	return requestServer.get<ResponseDTO<QueryResultArticleDTO>>(
 		`/${resource}/${id}`,
+	);
+}
+export function getImagesOfArticle(id: ID) {
+	return requestServer.get<ResponseDTO<string[]>>(
+		`/${resource}/${id}/images`,
 	);
 }
