@@ -17,7 +17,7 @@ import withRouter, {
 	RouterInfo,
 } from "../../component/withRouter/withRouter.tsx";
 import OSSService from "../../utils/OSSService/OSSService.ts";
-import { OSSBucket } from "../../types/enums.ts";
+import { CategoryType, OSSBucket } from "../../enums.ts";
 
 interface State {
 	title: string;
@@ -172,7 +172,7 @@ class Upload extends React.Component<{ router: RouterInfo }, State> {
 	async addNewCategory() {
 		const newType = await ModalService.prompt("输入类型名称");
 		if (newType && newType.trim().length > 0) {
-			addNewCategory(1, newType).then(({ data }) => {
+			addNewCategory(CategoryType.Article, newType).then(({ data }) => {
 				const array = this.state.categoryChunk;
 				array.push({
 					id: data.data.id,
@@ -212,7 +212,7 @@ class Upload extends React.Component<{ router: RouterInfo }, State> {
 	}
 
 	componentDidMount() {
-		getCategories(1).then(({ data }) => {
+		getCategories(CategoryType.Article).then(({ data }) => {
 			this.setState({
 				categoryChunk: data.data.map((it) => ({
 					id: it.id,
@@ -225,10 +225,10 @@ class Upload extends React.Component<{ router: RouterInfo }, State> {
 			getArticle(id).then(async ({ data }) => {
 				const dto = data.data;
 				if (dto.markdownUrl) {
-					OSSService.useBucket(OSSBucket.Article);
-					const response = await OSSService.get(
-						dto.markdownUrl + ".gz",
-					);
+					(await OSSService.get()).useBucket(OSSBucket.Article);
+					const response = await (
+						await OSSService.get()
+					).get(dto.markdownUrl + ".gz");
 					const readableStream = new ReadableStream({
 						start(controller) {
 							controller.enqueue(

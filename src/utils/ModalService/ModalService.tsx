@@ -2,7 +2,7 @@ import { createRoot, Root } from "react-dom/client";
 import { Modal, ModalProps } from "../../component/Modal/Modal.tsx";
 import { ReactNode, useState } from "react";
 import FloatingLabelInput from "../../component/Input/FloatingLabelInput.tsx";
-import { ModalAction } from "../../types/enums.ts";
+import { ModalAction } from "../../enums.ts";
 
 interface ModalConfig {
 	showCancel?: boolean;

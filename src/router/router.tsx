@@ -23,6 +23,15 @@ const router = createBrowserRouter([
 					},
 				],
 			},
+			{
+				path: "album",
+				children: [
+					{
+						path: "index",
+						lazy: () => import("../pages/album/index.tsx"),
+					},
+				],
+			},
 		],
 	},
 ]);

@@ -27,13 +27,14 @@ export function deleteArticle(id: number) {
 	return requestServer.delete<ResponseDTO<void>>(`/${resource}/${id}`);
 }
 
-export function queryArticle(page: number, pageSize: number) {
-	return requestServer.get<ResponseDTO<PageResultDTO<QueryResultArticleDTO>>>(
+export function queryArticle(page: number, pageSize: number, title: string) {
+	return requestServer.get<ResponseDTO<PageResultDTO<ArticleBrief>>>(
 		resource,
 		{
 			params: {
 				page,
 				pageSize,
+				title,
 			},
 		},
 	);

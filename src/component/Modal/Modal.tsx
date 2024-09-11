@@ -1,7 +1,7 @@
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import type { ReactNode } from "react";
 import Button from "../Button/Button.tsx";
-import { ModalAction } from "../../types/enums.ts";
+import { ModalAction } from "../../enums.ts";
 
 export interface ModalProps {
 	open: boolean;

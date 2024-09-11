@@ -6,6 +6,7 @@ import ArrowPathIcon from "@heroicons/react/20/solid/ArrowPathIcon";
 import DocumentDuplicateIcon from "@heroicons/react/20/solid/DocumentDuplicateIcon";
 import copyToClipboard from "../../utils/writeClipboard.ts";
 import TrashIcon from "@heroicons/react/20/solid/TrashIcon";
+import { OSSBucket } from "../../enums.ts";
 
 type ImageResourceProps = {
 	readonly file: File | string;
@@ -39,7 +40,7 @@ export default function ImageResource({ file, onRemove }: ImageResourceProps) {
 	useEffect(() => {
 		if (typeof file === "string") {
 			// eslint-disable-next-line react-hooks/rules-of-hooks
-			OSSService.useBucket("misaka-networks-article");
+			OSSService.useBucket(OSSBucket.Article);
 			setLocalImgURL(
 				OSSService.signatureUrl(
 					file.substring(file.indexOf("/", file.indexOf("//") + 2)),
