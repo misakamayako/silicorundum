@@ -31,7 +31,7 @@ export default function Button(props: Props) {
 				/>
 			) : null}
 			{props.children ? (
-				<span className={"flex-shrink-0"}>{props.children}</span>
+				<span className={"shrink-0"}>{props.children}</span>
 			) : null}
 		</button>
 	);

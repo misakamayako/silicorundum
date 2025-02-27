@@ -21,7 +21,7 @@ export default function FloatingLabelInput(props: Props) {
 				"rounded-md",
 				"border",
 				"border-gray-200",
-				"shadow-sm",
+				"shadow-xs",
 				"focus-within:border-blue-600",
 				"focus-within:ring-1",
 				"focus-within:ring-blue-600",
@@ -35,7 +35,7 @@ export default function FloatingLabelInput(props: Props) {
 						"bg-transparent",
 						"placeholder-transparent",
 						"focus:border-transparent",
-						"focus:outline-none",
+						"focus:outline-hidden",
 						"focus:ring-0",
 						"w-full",
 						"resize-none",
@@ -55,7 +55,7 @@ export default function FloatingLabelInput(props: Props) {
 						"w-full",
 						"placeholder-transparent",
 						"focus:border-transparent",
-						"focus:outline-none",
+						"focus:outline-hidden",
 						"focus:ring-0",
 					].join(" ")}
 					maxLength={props.maxLength}
